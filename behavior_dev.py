@@ -9,7 +9,7 @@ from gensim import models,corpora
 from IPython.display import display,clear_output
 from ipywidgets import IntSlider,Button,Output,ToggleButtons,HBox,VBox
 
-class behavior_dev_recommender():
+class recommender():
     def __init__(self):
         df=pd.read_csv('./data/behavior_dev.csv')
         self.data=df['content'].values
