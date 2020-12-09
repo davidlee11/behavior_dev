@@ -10,8 +10,8 @@ from IPython.display import display,clear_output
 from ipywidgets import IntSlider,Button,Output,ToggleButtons,HBox,VBox
 
 class recommender():
-    def __init__(self):
-        df=pd.read_csv('./data/behavior_dev.csv')
+    def __init__(self,path):
+        df=pd.read_csv(path+'./data/behavior_dev.csv')
         self.data=df['content'].values
         self.sentences=self.split_data(self.data)
 
@@ -19,7 +19,7 @@ class recommender():
         self.n_data=len(self.data)
         self.n_sentences=len(self.sentences)
 
-        self.lda=models.LdaModel.load('./models/lda.model')
+        self.lda=models.LdaModel.load(path+'./models/lda.model')
 
         self.model=nn.Sequential(nn.Linear(self.n_topics,128),
                                  nn.Sigmoid(),
@@ -33,8 +33,8 @@ class recommender():
                                    nn.Sigmoid(),
                                    nn.Linear(128,self.n_sentences))
         
-        self.model.load_state_dict(torch.load('./models/mlp_model.pt',map_location=torch.device('cpu')))
-        self.model_s.load_state_dict(torch.load('./models/mlp_model_s.pt',map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load(path+'./models/mlp_model.pt',map_location=torch.device('cpu')))
+        self.model_s.load_state_dict(torch.load(path+'./models/mlp_model_s.pt',map_location=torch.device('cpu')))
 
         self.chars=['자기주도적 학습 태도',
                     '직업과의 연계성 전망',
@@ -49,8 +49,8 @@ class recommender():
                     '리더십',
                     '협동심']
 
-        corpus=corpora.MmCorpus('./data/corpus.mm')
-        corpus_s=corpora.MmCorpus('./data/corpus_s.mm')
+        corpus=corpora.MmCorpus(path+'./data/corpus.mm')
+        corpus_s=corpora.MmCorpus(path+'./data/corpus_s.mm')
         self.score=self.topic_score(corpus)
         self.score_s=self.topic_score(corpus_s)
 
